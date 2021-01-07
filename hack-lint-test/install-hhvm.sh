@@ -27,6 +27,7 @@ if [ "$OS" = "Linux" ]; then
     DISTRO=$(lsb_release --codename --short)
     sudo add-apt-repository \
       "deb https://dl.hhvm.com/ubuntu ${DISTRO}-$1 main"
+    sudo apt-get remove hhvm || true
     sudo apt-get install -y hhvm
   fi
 
