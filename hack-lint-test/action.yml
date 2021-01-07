@@ -20,14 +20,25 @@ runs:
         hh_client --version
     - name: Install project dependencies
       shell: bash
-      run: php ${{runner.temp}}/composer.phar install
+      run: |
+        echo "::group::Install project dependencies"
+        php ${{runner.temp}}/composer.phar install
+        echo "::endgroup::"
     - name: Typecheck
       shell: bash
-      run: hh_client
+      run: |
+        echo "::group::Typecheck"
+        hh_client
+        echo "::endgroup::"
     - name: Lint
       shell: bash
       run: |
+        echo "::group::Lint"
         [ ! -e vendor/bin/hhast-lint ] || vendor/bin/hhast-lint
+        echo "::endgroup::"
     - name: Run tests
       shell: bash
-      run: vendor/bin/hacktest tests/
+      run: |
+        echo "::group::Run tests"
+        vendor/bin/hacktest tests/
+        echo "::endgroup::"

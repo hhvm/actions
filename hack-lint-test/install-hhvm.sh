@@ -6,6 +6,8 @@
 # This source code is licensed under the MIT license found in the
 # LICENSE file in the root directory of this source tree.
 
+echo "::group::Install HHVM"
+
 set -ex
 
 OS=$(uname -s)
@@ -38,5 +40,8 @@ elif [ "$OS" = "Darwin" ]; then
 
 else
   echo "Unknown OS: $OS"
+  echo "::endgroup::"
   return 1
 fi
+
+echo "::endgroup::"
