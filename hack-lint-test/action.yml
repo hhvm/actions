@@ -32,9 +32,10 @@ runs:
         echo "::endgroup::"
     - name: Lint
       shell: bash
+      # nightly lint errors are most likely just an hhast schema version issue
+      if: inputs.hhvm != "nightly"
       run: |
-        # nightly lint errors are most likely just an hhast schema version issue
-        if [ "${{inputs.hhvm}}" != "nightly" ] && [ -e vendor/bin/hhast-lint ]; then
+        if [ -e vendor/bin/hhast-lint ]; then
           echo "::group::Lint"
           vendor/bin/hhast-lint
           echo "::endgroup::"
