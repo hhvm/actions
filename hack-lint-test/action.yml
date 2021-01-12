@@ -34,7 +34,11 @@ runs:
       shell: bash
       run: |
         # nightly lint errors are most likely just an hhast schema version issue
-        if [ "${{inputs.hhvm}}" != "nightly" ] && [ -e vendor/bin/hhast-lint ]; then
+        if [ "${{inputs.hhvm}}" = "nightly" ]; then
+          echo "Lint skipped on nightly HHVM build."
+        elif [ ! -e vendor/bin/hhast-lint ]; then
+          echo "Lint not available."
+        else
           echo "::group::Lint"
           vendor/bin/hhast-lint
           echo "::endgroup::"
