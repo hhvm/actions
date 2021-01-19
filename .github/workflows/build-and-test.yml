@@ -1,0 +1,25 @@
+name: Continuous Integration
+on:
+  push:
+  pull_request:
+jobs:
+  build:
+    name: 'Skip: ${{matrix.skip}}'
+    strategy:
+      fail-fast: false
+      matrix:
+        skip: [ true, false ]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # No way to set working directory for a GitHub Action :(
+      - name: Move test files to repository root
+        shell: bash
+        run: |
+          shopt -s dotglob
+          mv test-project/* .
+      - uses: ./hack-lint-test
+        with:
+          hhvm: '4.80'
+          skip_lint: ${{matrix.skip}}
+          skip_tests: ${{matrix.skip}}

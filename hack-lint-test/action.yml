@@ -4,6 +4,14 @@ inputs:
   hhvm:
     description: 'HHVM version (latest/nightly/#.##)'
     required: true
+  skip_lint:
+    description: 'Optional. Set to "true" to skip the hhast-lint step.'
+    required: false
+    default: false
+  skip_tests:
+    description: 'Optional. Set to "true" to skip the hacktest step.'
+    required: false
+    default: false
 runs:
   using: "composite"
   steps:
@@ -32,20 +40,7 @@ runs:
         echo "::endgroup::"
     - name: Lint
       shell: bash
-      run: |
-        # nightly lint errors are most likely just an hhast schema version issue
-        if [ "${{inputs.hhvm}}" = "nightly" ]; then
-          echo "Lint skipped on nightly HHVM build."
-        elif [ ! -e vendor/bin/hhast-lint ]; then
-          echo "Lint not available."
-        else
-          echo "::group::Lint"
-          vendor/bin/hhast-lint
-          echo "::endgroup::"
-        fi
+      run: ${{github.action_path}}/lint.sh "${{inputs.hhvm}}" "${{inputs.skip_lint}}"
     - name: Run tests
       shell: bash
-      run: |
-        echo "::group::Run tests"
-        vendor/bin/hacktest tests/
-        echo "::endgroup::"
+      run: ${{github.action_path}}/test.sh "${{inputs.skip_tests}}"
