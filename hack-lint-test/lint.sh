@@ -10,6 +10,7 @@ set -e
 
 HHVM="$1"
 SKIP="$2"
+FLAGS="$3"
 
 if [ "$SKIP" = "true" ]; then
   echo "Lint skipped."
@@ -27,5 +28,8 @@ if [ "$HHVM" = "nightly" ]; then
 fi
 
 echo "::group::Lint"
-vendor/bin/hhast-lint
+(
+  set -x
+  hhvm $FLAGS vendor/bin/hhast-lint
+)
 echo "::endgroup::"

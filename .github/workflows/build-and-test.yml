@@ -18,8 +18,16 @@ jobs:
         run: |
           shopt -s dotglob
           mv test-project/* .
-      - uses: ./hack-lint-test
+      - name: Standard run
+        uses: ./hack-lint-test
         with:
-          hhvm: '4.80'
+          hhvm: latest
+          skip_lint: ${{matrix.skip}}
+          skip_tests: ${{matrix.skip}}
+      - name: Override HHVM flags
+        uses: ./hack-lint-test
+        with:
+          hhvm: latest
+          hhvm_flags: -dhhvm.hack.lang.enable_coeffects=true -dhhvm.forbid_division_by_zero=true
           skip_lint: ${{matrix.skip}}
           skip_tests: ${{matrix.skip}}
