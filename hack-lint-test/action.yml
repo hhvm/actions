@@ -12,6 +12,9 @@ inputs:
     description: 'Optional. Set to "true" to skip the hacktest step.'
     required: false
     default: false
+  hhvm_flags:
+    description: 'Optional. Command line arguments that will be added to all `hhvm` invocations (hh-autoload, hhast-lint, hacktest).'
+    required: false
 runs:
   using: "composite"
   steps:
@@ -30,8 +33,23 @@ runs:
       shell: bash
       run: |
         echo "::group::Install project dependencies"
-        php ${{runner.temp}}/composer.phar install
+        FLAGS=""
+        if [ -n "${{inputs.hhvm_flags}}" ]; then
+          FLAGS="--no-autoloader"
+        fi
+        php ${{runner.temp}}/composer.phar install $FLAGS
         echo "::endgroup::"
+    - name: Generate autoload map
+      shell: bash
+      run: |
+        if [ -n "${{inputs.hhvm_flags}}" ]; then
+          echo "::group::Generate autoload map"
+          (
+            set -x
+            hhvm ${{inputs.hhvm_flags}} vendor/bin/hh-autoload
+          )
+          echo "::endgroup::"
+        fi
     - name: Typecheck
       shell: bash
       run: |
@@ -40,7 +58,14 @@ runs:
         echo "::endgroup::"
     - name: Lint
       shell: bash
-      run: ${{github.action_path}}/lint.sh "${{inputs.hhvm}}" "${{inputs.skip_lint}}"
+      run: |
+        ${{github.action_path}}/lint.sh \
+          "${{inputs.hhvm}}" \
+          "${{inputs.skip_lint}}" \
+          "${{inputs.hhvm_flags}}"
     - name: Run tests
       shell: bash
-      run: ${{github.action_path}}/test.sh "${{inputs.skip_tests}}"
+      run: |
+        ${{github.action_path}}/test.sh \
+          "${{inputs.skip_tests}}" \
+          "${{inputs.hhvm_flags}}"

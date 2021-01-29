@@ -9,6 +9,7 @@
 set -e
 
 SKIP="$1"
+FLAGS="$2"
 
 if [ "$SKIP" = "true" ]; then
   echo "Tests skipped."
@@ -21,5 +22,8 @@ if [ "$SKIP" != "false" ]; then
 fi
 
 echo "::group::Run tests"
-vendor/bin/hacktest tests/
+(
+  set -x
+  hhvm $FLAGS vendor/bin/hacktest tests/
+)
 echo "::endgroup::"
