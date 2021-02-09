@@ -32,6 +32,7 @@ if [ "$OS" = "Linux" ]; then
   fi
 
 elif [ "$OS" = "Darwin" ]; then
+  brew update
   brew tap hhvm/hhvm
   if [ "$1" = "latest" ]; then
     brew install hhvm

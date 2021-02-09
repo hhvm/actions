@@ -4,12 +4,13 @@ on:
   pull_request:
 jobs:
   build:
-    name: 'Skip: ${{matrix.skip}}'
+    name: 'Skip: ${{matrix.skip}} (${{matrix.os}})'
     strategy:
       fail-fast: false
       matrix:
+        os: [ ubuntu, macos ]
         skip: [ true, false ]
-    runs-on: ubuntu-latest
+    runs-on: ${{matrix.os}}-latest
     steps:
       - uses: actions/checkout@v2
       # No way to set working directory for a GitHub Action :(
