@@ -1,5 +1,5 @@
 name: 'InstallHack'
-description: 'Installs Hack and HHVM',
+description: 'Installs Hack and HHVM'
 inputs:
   hhvm:
     description: 'HHVM version (latest/nightly/#.##)'
