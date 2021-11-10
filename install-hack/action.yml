@@ -1,0 +1,12 @@
+name: 'InstallHack'
+description: 'Installs Hack and HHVM',
+inputs:
+  hhvm:
+    description: 'HHVM version (latest/nightly/#.##)'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Install HHVM
+      shell: bash
+      run: ${{github.action_path}}/../hack-lint-test/install-hhvm.sh ${{inputs.hhvm}}
