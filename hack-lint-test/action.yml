@@ -31,6 +31,8 @@ runs:
         hh_client --version
     - name: Install project dependencies
       shell: bash
+      env:
+        COMPOSER_ROOT_VERSION: dev-${{github.base_ref || github.ref_name}}
       run: |
         echo "::group::Install project dependencies"
         FLAGS=""
