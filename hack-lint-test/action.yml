@@ -48,7 +48,7 @@ runs:
           echo "::group::Generate autoload map"
           (
             set -x
-            hhvm ${{inputs.hhvm_flags}} vendor/bin/hh-autoload
+            hhvm ${{inputs.hhvm_flags}} vendor/hhvm/hhvm-autoload/bin/hh-autoload
           )
           echo "::endgroup::"
         fi
