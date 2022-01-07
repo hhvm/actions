@@ -30,6 +30,6 @@ fi
 echo "::group::Lint"
 (
   set -x
-  vendor/bin/hhast-lint
+  hhvm $FLAGS vendor/bin/hhast-lint
 )
 echo "::endgroup::"

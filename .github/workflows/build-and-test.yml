@@ -25,16 +25,10 @@ jobs:
           hhvm: latest
           skip_lint: ${{matrix.skip}}
           skip_tests: ${{matrix.skip}}
-      - name: Create custom HHVM configuration
-        run: |
-          HHVM_CONFIG_FILE=$(mktemp)
-          echo "HHVM_CONFIG_FILE=${HHVM_CONFIG_FILE}" >> $GITHUB_ENV
-
-          echo "hhvm.hack.lang.enable_coeffects=true" >> $HHVM_CONFIG_FILE
-          echo "hhvm.forbid_division_by_zero=true" >> $HHVM_CONFIG_FILE
-      - name: Run with custom HHVM configuration
+      - name: Override HHVM flags
         uses: ./hack-lint-test
         with:
           hhvm: latest
+          hhvm_flags: -dhhvm.hack.lang.enable_coeffects=true -dhhvm.forbid_division_by_zero=true
           skip_lint: ${{matrix.skip}}
           skip_tests: ${{matrix.skip}}
