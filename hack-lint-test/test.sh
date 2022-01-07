@@ -24,6 +24,6 @@ fi
 echo "::group::Run tests"
 (
   set -x
-  hhvm $FLAGS vendor/bin/hacktest tests/
+  vendor/bin/hacktest tests/
 )
 echo "::endgroup::"
