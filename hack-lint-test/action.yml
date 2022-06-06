@@ -29,10 +29,10 @@ runs:
       run: |
         hhvm --version
         hh_client --version
+    - if: github.ref_type != 'tag'
+      run: echo "COMPOSER_ROOT_VERSION=dev-${{github.base_ref || github.ref_name}}" >> $GITHUB_ENV
     - name: Install project dependencies
       shell: bash
-      env:
-        COMPOSER_ROOT_VERSION: dev-${{github.base_ref || github.ref_name}}
       run: |
         echo "::group::Install project dependencies"
         FLAGS=""
